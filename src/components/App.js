@@ -11,7 +11,16 @@ function App() {
     fetch('http://localhost:3000/areas')
     .then(res => res.json())
     .then(data => setAreas((areas) => {
+        const arr = []
+        data.forEach(area => {
+          const obj = {...area}
+          // obj["key"] = area.name
+          // obj["text"] = area.name
+          // obj["value"] = area.name
+          arr.push(obj)
+        })
 
+        return arr
     }))
   }, [])
 

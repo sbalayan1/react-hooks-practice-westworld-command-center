@@ -2,7 +2,7 @@ import React from "react";
 import "../stylesheets/Area.css";
 
 function Area({area}) {
-  const {name, limit, auth_req} = area
+  // const {name, limit, auth_req} = area
   return (
     <div
       className="area"
@@ -24,6 +24,6 @@ function Area({area}) {
 //       );
 //     }
 //   },
-};
+// };
 
 export default Area;

@@ -27,7 +27,7 @@ function Headquarters({areas}) {
     <Grid celled="internally">
       <Grid.Column width={8}>
         <ColdStorage>
-          <HostList hosts={hosts} handleSelectHost={handleSelectHost}/>
+          <HostList hosts={hosts} handleSelectHost={handleSelectHost} selectedHost={selectedHost}/>
         </ColdStorage>
       </Grid.Column>
       <Grid.Column width={5}>

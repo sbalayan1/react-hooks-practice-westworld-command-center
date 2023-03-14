@@ -11,17 +11,13 @@ import {
 import "../stylesheets/HostInfo.css";
 
 function HostInfo({host, areas}) {
+  console.log(host)
   const {firstName, lastName, active, imageUrl, gender, area, authorized} = host
   // This state is just to show how the dropdown component works.
   // Options have to be formatted in this way (array of objects with keys of: key, text, value)
   // Value has to match the value in the object to render the right text.
 
   // IMPORTANT: But whether it should be stateful or not is entirely up to you. Change this component however you like.
-  const [options, setOptions] = useState([
-    { key: "some_area", text: "Some Area", value: "some_area" },
-    { key: "another_area", text: "Another Area", value: "another_area" },
-  ]);
-
   const [selectedArea, setSelectedArea] = useState(area);
 
   function handleOptionChange(e, { value }) {
