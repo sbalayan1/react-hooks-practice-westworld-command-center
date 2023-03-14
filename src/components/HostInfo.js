@@ -10,21 +10,23 @@ import {
 } from "semantic-ui-react";
 import "../stylesheets/HostInfo.css";
 
-function HostInfo({host}) {
+function HostInfo({host, areas}) {
   const {firstName, lastName, active, imageUrl, gender, area, authorized} = host
   // This state is just to show how the dropdown component works.
   // Options have to be formatted in this way (array of objects with keys of: key, text, value)
   // Value has to match the value in the object to render the right text.
 
   // IMPORTANT: But whether it should be stateful or not is entirely up to you. Change this component however you like.
-  const [options] = useState([
+  const [options, setOptions] = useState([
     { key: "some_area", text: "Some Area", value: "some_area" },
     { key: "another_area", text: "Another Area", value: "another_area" },
   ]);
 
-  const [value] = useState("some_area");
+  const [selectedArea, setSelectedArea] = useState(area);
 
   function handleOptionChange(e, { value }) {
+    setSelectedArea(value)
+
     // the 'value' attribute is given via Semantic's Dropdown component.
     // Put a debugger or console.log in here and see what the "value" variable is when you pass in different options.
     // See the Semantic docs for more info: https://react.semantic-ui.com/modules/dropdown/#usage-controlled
@@ -63,11 +65,11 @@ function HostInfo({host}) {
               />
             </Card.Meta>
             <Divider />
-            Current Area: {area}
+            Current Area: {selectedArea}
             <Dropdown
               onChange={handleOptionChange}
-              value={value}
-              options={options}
+              value={selectedArea}
+              options={areas}
               selection
             />
           </Card.Content>

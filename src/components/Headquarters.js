@@ -1,12 +1,14 @@
 import React, {useState, useEffect} from "react";
-import { Grid } from "semantic-ui-react";
+import { Grid, Image } from "semantic-ui-react";
+import * as Images from "../services/Images";
 import Details from "./Details";
 import HostList from './HostList'
+import HostInfo from './HostInfo'
 import ColdStorage from './ColdStorage'
 import LogPanel from './LogPanel'
 import "../stylesheets/Headquarters.css";
 
-function Headquarters() {
+function Headquarters({areas}) {
   const [hosts, setHosts] = useState([])
   const [selectedHost, setSelectedHost] = useState(null)
 
@@ -29,7 +31,13 @@ function Headquarters() {
         </ColdStorage>
       </Grid.Column>
       <Grid.Column width={5}>
-        <Details selectedHost={selectedHost}/>
+        <Details>
+          {selectedHost ? 
+            <HostInfo host={selectedHost} areas={areas}/> 
+          : 
+            <Image size="medium" src={Images.westworldLogo} alt="westworld logo" />
+          }
+        </Details>
       </Grid.Column>
       <Grid.Column width={3}>
         <LogPanel />
