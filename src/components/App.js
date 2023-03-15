@@ -7,6 +7,7 @@ import Area from './Area'
 import HostList from "./HostList";
 import HostInfo from './HostInfo'
 import * as Images from "../services/Images";
+import LogPanel from "./LogPanel";
 
 function App() {
   const [areas, setAreas] = useState([])
@@ -17,6 +18,39 @@ function App() {
   const handleSelectHost = (host) => {
     setSelectedHost((selectedHost) => selectedHost && selectedHost.id === host.id ? null : host)
   }
+
+  const updateHosts = (res, key, host) => {
+    setHosts((hosts) => {
+      const copy = [...hosts]
+      const tgt = copy[host.id - 1]
+      tgt[key] = res[key]
+      return copy
+    })
+  }
+
+  async function updateDatabase(key, value, host) {
+    try {
+      const configObj = {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          [key]: value
+        })
+      }
+
+      const promise = await fetch(`http://localhost:3000/hosts/${host.id}`, configObj)
+      const response = await promise.json()
+      return response
+
+    } catch(error) {
+      console.error(error)
+    }
+    
+  }
+
 
   useEffect(() => {
     fetch('http://localhost:3000/areas')
@@ -54,8 +88,6 @@ function App() {
               if (host.area === area.name && host.active) hostsToDisplay.push(host)
             }
 
-            console.log(hostsToDisplay, area)
-
             return (
               <Area key={area.id} area={area} >
                 <HostList hosts={hostsToDisplay} handleSelectHost={handleSelectHost} selectedHost={selectedHost}/>
@@ -67,10 +99,11 @@ function App() {
       <Headquarters>
         <HostList hosts={hosts} handleSelectHost={handleSelectHost} selectedHost={selectedHost}/>
         {selectedHost ? 
-            <HostInfo host={selectedHost} areas={areas} setSelectedHost={setSelectedHost} setHosts={setHosts}/> 
+            <HostInfo host={selectedHost} areas={areas} setSelectedHost={setSelectedHost} updateHosts={updateHosts} updateDatabase={updateDatabase}/> 
           : 
             <Image size="medium" src={Images.westworldLogo} alt="westworld logo" />
         }
+        <LogPanel updateHosts={updateHosts} updateDatabase={updateDatabase}/>
       </Headquarters>
     </Segment>
   );

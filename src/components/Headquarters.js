@@ -2,7 +2,6 @@ import React, {useState} from "react";
 import { Grid} from "semantic-ui-react";
 import Details from "./Details";
 import ColdStorage from './ColdStorage'
-import LogPanel from './LogPanel'
 import "../stylesheets/Headquarters.css";
 
 function Headquarters({children}) {
@@ -19,7 +18,7 @@ function Headquarters({children}) {
         </Details>
       </Grid.Column>
       <Grid.Column width={3}>
-        <LogPanel />
+        {children[2]}
       </Grid.Column>
     </Grid>
   );

@@ -10,7 +10,7 @@ import {
 } from "semantic-ui-react";
 import "../stylesheets/HostInfo.css";
 
-function HostInfo({host, areas, setSelectedHost, setHosts}) {
+function HostInfo({host, areas, setSelectedHost, updateHosts, updateDatabase}) {
   const {firstName, lastName, active, imageUrl, gender, area, authorized} = host
   // This state is just to show how the dropdown component works.
   // Options have to be formatted in this way (array of objects with keys of: key, text, value)
@@ -19,22 +19,21 @@ function HostInfo({host, areas, setSelectedHost, setHosts}) {
   // IMPORTANT: But whether it should be stateful or not is entirely up to you. Change this component however you like.
   const [selectedArea, setSelectedArea] = useState(area);
 
-  const updateHosts = (res, key) => {
-    setHosts((hosts) => {
-      const copy = [...hosts]
-      const tgt = copy[host.id - 1]
-      tgt[key] = res[key]
-      return copy
-    })
-  }
+  // const updateHosts = (res, key) => {
+  //   setHosts((hosts) => {
+  //     const copy = [...hosts]
+  //     const tgt = copy[host.id - 1]
+  //     tgt[key] = res[key]
+  //     return copy
+  //   })
+  // }
 
   function handleOptionChange(e, { value }) {
-    updateStatus("area", value)
+    updateDatabase("area", value)
     .then(res => {
-      console.log(res)
       setSelectedHost(res)
       setSelectedArea(value)
-      updateHosts(res, "area")
+      updateHosts(res, "area", host)
     })
 
 
@@ -43,36 +42,13 @@ function HostInfo({host, areas, setSelectedHost, setHosts}) {
     // See the Semantic docs for more info: https://react.semantic-ui.com/modules/dropdown/#usage-controlled
   }
 
-  async function updateStatus(key, value) {
-    try {
-      const configObj = {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          [key]: value
-        })
-      }
-
-      const promise = await fetch(`http://localhost:3000/hosts/${host.id}`, configObj)
-      const response = await promise.json()
-      return response
-
-    } catch(error) {
-      console.error(error)
-    }
-    
-  }
-
   function handleRadioChange(e) {
     //updates backend
-    updateStatus("active", !host["active"])
+    updateDatabase("active", !host["active"], host)
     //updates state
     .then(res => {
       setSelectedHost(res)
-      updateHosts(res, "active")
+      updateHosts(res, "active", host)
 
     })
   }
