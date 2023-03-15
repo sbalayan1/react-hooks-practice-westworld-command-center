@@ -30,6 +30,7 @@ function App() {
           obj["text"] = area.name
           obj["value"] = area.name
           obj["name"] = area.name
+          obj["limit"] = area.limit
           arr.push(obj)
         })
 
@@ -47,7 +48,14 @@ function App() {
       <WestworldMap>
         {
            areas.map((area) => {
-            const hostsToDisplay = hosts.filter(host => host.area === area.name && host.active)
+            const hostsToDisplay = []
+            for (let host of hosts) {
+              if (hostsToDisplay.length >= area.limit) break
+              if (host.area === area.name && host.active) hostsToDisplay.push(host)
+            }
+
+            console.log(hostsToDisplay, area)
+
             return (
               <Area key={area.id} area={area} >
                 <HostList hosts={hostsToDisplay} handleSelectHost={handleSelectHost} selectedHost={selectedHost}/>

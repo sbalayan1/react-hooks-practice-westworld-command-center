@@ -19,15 +19,31 @@ function HostInfo({host, areas, setSelectedHost, setHosts}) {
   // IMPORTANT: But whether it should be stateful or not is entirely up to you. Change this component however you like.
   const [selectedArea, setSelectedArea] = useState(area);
 
+  const updateHosts = (res, key) => {
+    setHosts((hosts) => {
+      const copy = [...hosts]
+      const tgt = copy[host.id - 1]
+      tgt[key] = res[key]
+      return copy
+    })
+  }
+
   function handleOptionChange(e, { value }) {
-    // setSelectedArea(value)
+    updateStatus("area", value)
+    .then(res => {
+      console.log(res)
+      setSelectedHost(res)
+      setSelectedArea(value)
+      updateHosts(res, "area")
+    })
+
 
     // the 'value' attribute is given via Semantic's Dropdown component.
     // Put a debugger or console.log in here and see what the "value" variable is when you pass in different options.
     // See the Semantic docs for more info: https://react.semantic-ui.com/modules/dropdown/#usage-controlled
   }
 
-  async function updateStatus(host) {
+  async function updateStatus(key, value) {
     try {
       const configObj = {
         method: 'PATCH',
@@ -36,7 +52,7 @@ function HostInfo({host, areas, setSelectedHost, setHosts}) {
           'Accept': 'application/json'
         },
         body: JSON.stringify({
-          "active": !host.active
+          [key]: value
         })
       }
 
@@ -50,19 +66,13 @@ function HostInfo({host, areas, setSelectedHost, setHosts}) {
     
   }
 
-  function handleRadioChange() {
+  function handleRadioChange(e) {
     //updates backend
-    updateStatus(host)
-
+    updateStatus("active", !host["active"])
     //updates state
     .then(res => {
       setSelectedHost(res)
-      setHosts((hosts) => {
-        const copy = [...hosts]
-        const tgt = copy[host.id - 1]
-        tgt["active"] = res["active"]
-        return copy
-      })
+      updateHosts(res, "active")
 
     })
   }
@@ -98,6 +108,7 @@ function HostInfo({host, areas, setSelectedHost, setHosts}) {
             <Divider />
             Current Area: {selectedArea}
             <Dropdown
+              name="area"
               onChange={handleOptionChange}
               value={selectedArea}
               options={areas}
