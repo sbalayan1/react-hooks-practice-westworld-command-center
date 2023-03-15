@@ -1,13 +1,16 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import { Segment } from "semantic-ui-react";
-import Area from './Area'
 
-function WestworldMap({areas}) {
-  const areasToDisplay = areas.map((area) => <Area key={area.id} area={area} />)
+function WestworldMap({children}) {
+
+  // const areasToDisplay = areas.map((area) => {
+  //   const hostsToDisplay = hosts.filter(host => host.area === area.name && host.active)
+  //   return <Area key={area.id} area={area} hosts={hostsToDisplay} handleSelectHost={handleSelectHost} selectedHost={selectedHost}/>
+  // })
 
   return (
     <Segment id="map">
-      {areasToDisplay}
+      {children}
     </Segment>
   )
 }

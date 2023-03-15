@@ -1,8 +1,10 @@
 import React from "react";
 import "../stylesheets/Area.css";
+import HostList from './HostList'
 
-function Area({area}) {
+function Area({area, children}) {
   // const {name, limit, auth_req} = area
+
   return (
     <div
       className="area"
@@ -11,7 +13,7 @@ function Area({area}) {
       <h3 className="labels">
         {area.name.replace('_', ' ')}
       </h3>
-      {/* See Checkpoint 1 item 2 in the Readme for a clue as to what goes here */}
+      {children}
     </div>
   );
 }

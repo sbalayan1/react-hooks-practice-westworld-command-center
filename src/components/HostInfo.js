@@ -10,8 +10,7 @@ import {
 } from "semantic-ui-react";
 import "../stylesheets/HostInfo.css";
 
-function HostInfo({host, areas}) {
-  console.log(host)
+function HostInfo({host, areas, setSelectedHost, setHosts}) {
   const {firstName, lastName, active, imageUrl, gender, area, authorized} = host
   // This state is just to show how the dropdown component works.
   // Options have to be formatted in this way (array of objects with keys of: key, text, value)
@@ -21,15 +20,51 @@ function HostInfo({host, areas}) {
   const [selectedArea, setSelectedArea] = useState(area);
 
   function handleOptionChange(e, { value }) {
-    setSelectedArea(value)
+    // setSelectedArea(value)
 
     // the 'value' attribute is given via Semantic's Dropdown component.
     // Put a debugger or console.log in here and see what the "value" variable is when you pass in different options.
     // See the Semantic docs for more info: https://react.semantic-ui.com/modules/dropdown/#usage-controlled
   }
 
+  async function updateStatus(host) {
+    try {
+      const configObj = {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          "active": !host.active
+        })
+      }
+
+      const promise = await fetch(`http://localhost:3000/hosts/${host.id}`, configObj)
+      const response = await promise.json()
+      return response
+
+    } catch(error) {
+      console.error(error)
+    }
+    
+  }
+
   function handleRadioChange() {
-    console.log("The radio button fired");
+    //updates backend
+    updateStatus(host)
+
+    //updates state
+    .then(res => {
+      setSelectedHost(res)
+      setHosts((hosts) => {
+        const copy = [...hosts]
+        const tgt = copy[host.id - 1]
+        tgt["active"] = res["active"]
+        return copy
+      })
+
+    })
   }
 
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 import { Segment } from "semantic-ui-react";
-// import HostList from './HostList'
+
 
 function ColdStorage({children}) {
   return (
